@@ -6,6 +6,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from core import models
 
+class CustomCheckboxInput(forms.CheckboxInput):
+    template_name = 'custom/forms/widgets/custom_checkbox.html'
+
 
 class Fieldset:
     def __init__(self, name, index):
@@ -95,7 +98,11 @@ def create_from_person_factory(model):
     verbose_name = force_text(model._meta.verbose_name)
 
     class CreateFrom(forms.Form):
-        create = forms.BooleanField(label='Crear %s' % verbose_name, required=False)
+        create = forms.BooleanField(
+            label='Crear %s' % verbose_name,
+            required=False,
+            widget=CustomCheckboxInput(attrs={'class': 'custom-control-input'})
+        )
 
         def __init__(self, person, *args, **kwargs):
             self.person = person
